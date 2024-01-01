@@ -16,7 +16,7 @@ def test_data_contains_10_pictures(client):
     assert len(res.json) == 10
 
 
-def test_get_picture(client):
+def test_get_pictures(client):
     res = client.get("/picture")
     assert res.status_code == 200
     assert len(res.json) == 10
