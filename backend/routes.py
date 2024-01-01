@@ -35,9 +35,7 @@ def count():
 ######################################################################
 @app.route("/picture", methods=["GET"])
 def get_pictures():
-    if data:
-        return data, 200
-    return {"Message": "No pictures exist"}, 200
+    return data, 200
 
 ######################################################################
 # GET A PICTURE
@@ -49,7 +47,7 @@ def get_picture_by_id(pic_id):
     for picture in data:
         if picture["id"] == pic_id:
             return picture, 200
-    return {"Message": "Picture does not exist"}, 404
+    return {"Message": "Picture not found"}, 404
 
 
 ######################################################################
@@ -61,7 +59,7 @@ def create_picture():
         if request.json["id"] == picture["id"]:
             return {"Message": f"picture with id {request.json['id']} already present"}, 302
     data.append(request.json)
-    return {"id": request.json['id']}, 201
+    return request.json, 201
 
 
 ######################################################################
@@ -72,10 +70,10 @@ def create_picture():
 @app.route("/picture/<int:pic_id>", methods=["PUT"])
 def update_picture(pic_id):
     if pic_id:
-        for picture in data:
+        for index, picture in enumerate(data):
             if picture["id"] == request.json["id"]:
-                data.remove(picture)
-                data.append(request.json)
+                data[index] = request.json
+                return picture, 201
         return {"Message": "picture not found"}, 404
 
 ######################################################################
